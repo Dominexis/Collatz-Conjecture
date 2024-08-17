@@ -5,6 +5,7 @@ def collatz_sequence(value: int, denominator: int = 1, steps: int = 0) -> list[i
 
     A denominator may be specified to iterate over rational numbers. Make sure `value` and `denominator` are coprime.
     """
+
     sequence: list[int] = [value]
     while True:
         # Multiply by 3 and add denominator if odd

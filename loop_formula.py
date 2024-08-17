@@ -12,6 +12,7 @@ def get_loop(sequence: list[int]) -> tuple[int, int]:
     The result is the number encoded as a numerator/denominator pair such that if you take the Collatz sequence of it,
     the division steps will follow the provided sequence, and it will return to itself after the sequence completes.
     """
+
     return (get_loop_numerator(sequence), get_loop_denominator(sequence))
 
 
@@ -25,6 +26,7 @@ def get_loop_numerator(sequence: list[int]) -> int:
     The first term is always a power of 3, and the last term is always a power of 2,
     thus it will never be divisible by 2 or 3.
     """
+
     length = len(sequence)
     return sum([
         powers.POWERS_OF_3[length - i - 1] *
@@ -42,4 +44,5 @@ def get_loop_denominator(sequence: list[int]) -> int:
 
     Because it is always a power of 2 minus a power of 3, it will never be divisible by 2 or 3.
     """
+
     return generic.product(sequence) - powers.POWERS_OF_3[len(sequence)]
