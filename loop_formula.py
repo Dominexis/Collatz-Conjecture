@@ -5,7 +5,7 @@ import powers
 
 def get_loop(sequence: list[int]) -> tuple[int, int]:
     """
-    Computes the Collatz Loop Formula on the provided sequence.
+    Computes the Collatz loop formula on the provided sequence.
 
     The sequence represents the powers of 2 of the division step of the Collatz sequence, uniquely encoding the loop.
 
@@ -18,7 +18,7 @@ def get_loop(sequence: list[int]) -> tuple[int, int]:
 
 def get_loop_numerator(sequence: list[int]) -> int:
     """
-    Computes the numerator of the Collatz Loop Formula.
+    Computes the numerator of the Collatz loop formula.
 
     It is the sum of terms where each term is the product of some power of 2 and some power of 3.
 
@@ -36,7 +36,7 @@ def get_loop_numerator(sequence: list[int]) -> int:
 
 def get_loop_denominator(sequence: list[int]) -> int:
     """
-    Computes the denominator of the Collatz Loop Formula.
+    Computes the denominator of the Collatz loop formula.
 
     It is the product of the sequence minus 3 to the power of the length of the sequence.
 
