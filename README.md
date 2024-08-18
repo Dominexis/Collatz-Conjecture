@@ -1,11 +1,11 @@
 # Collatz Conjecture
-A collection of scripts and tools for studying the Collatz Conjecture.
+A collection of scripts and tools for studying the Collatz conjecture.
 
 Start with some number `n`. If `n` is odd, multiply it by 3 and add 1. Conversely, if `n` is even, divide it by 2. Repeat this arbitrarily many times.
 
-The Collatz Conjecture states that all natural numbers, when applying the above rule, will eventually reach 1.
+The Collatz conjecture states that all natural numbers, when applying the above rule, will eventually reach 1.
 
-A more general version of the Collatz Conjecture exists to account for 3 loops in the negatives, 0, and the positive loop containing 1.
+A more general version of the Collatz conjecture exists to account for 3 loops in the negatives, 0, and the positive loop containing 1.
 
 ## Collatz Loop Formula
 A central part of the study is the Collatz loop formula. It takes a sequence of powers of 2, which represent the division steps of the Collatz sequence, and returns the value that will return to itself after said Collatz sequence.
@@ -33,7 +33,7 @@ To apply the sequence, simply consider the numerator of the fraction when it is 
 
 The loop formula will return rational values for most inputs.
 
-## Known Attributes
+## Known Attributes of the Loop Formula
 
 - Given the linearity of the loop formula and its derivation, a given sequence will produce exactly one loop. All loops have a unique identity, and no two loops share the same steps.
 
@@ -55,6 +55,50 @@ The loop formula will return rational values for most inputs.
 
 - The unsimplified numerator and denominator from the loop formula will be known as the "base numerator" and "base denominator" respectively.
 
-    - Because the base denominator is computed only from the total powers of 2 and the length of the list, the distribution of factors of 2 within the sequence does not change the value. e.g. `[2,4,8]` and `[4,4,4]` both produce a base denominator of 37.
+    - Because the base denominator is computed only from the length of the sequence and its weight (total powers of 2), the distribution of factors of 2 within the sequence does not change the value. e.g. `[2,4,8]` and `[4,4,4]` both produce a base denominator of 37.
     - This means that odd numbers within the same loop (which translate the sequence left or right) share a base denominator. e.g. `[2,4,8]` and `[4,8,2]` are two values within the same 3-step loop.
     - Because they also share a simplified denominator, it means that every base numerator within a loop has the same greatest common divisor with the base denominator.
+
+## Loop Plotter
+
+The loop plotter function is a 2-dimensional function to plot out all possible loops that can exist, save for non-canon loops such as 0 or -1/2.
+
+The x axis plots the length of the sequence. The y axis plots the weight of the sequence, that is, the sum of the exponents of the powers of 2 in the sequence. e.g. the weight of `[2,2,4,2,8]` is `1+1+2+1+3`, or 8.
+
+Sequences which repeat themselves are omitted e.g. `[2,4,2,4,2,4]`.
+
+The output data is sorted into the following fields:
+
+- `denominator`: The base denominator computed from that input.
+
+- `denominator_factors`: The prime factors of the base denominator. The keys of the array are the factors. The values of the array are the number of times that factor appears.
+
+- `numerators`: The numerators which are computed from all possible loops from that input. The keys of the array are the numerators. The values of the array are the greatest common divisors between the base numerators and the base denominators.
+
+- `numerator_gcds`: The greatest common divisors between the base numerators and the base denominator. The keys of the array are the greatest common divisors. The values of the array are the number of times each greatest common divisor appears.
+
+A sample of the output was generated and written into `loop_plot.json`.
+
+## Known Attributes of the Loop Plotter
+
+- The space below the diagonal is undefined given that every entry in the list must be at least 2, hence, the weight must be at least equal to the length.
+
+- Any given input has exactly one base denominator, because the base denominator is computed only from the length of the sequence and its weight.
+
+- The base denominators are the difference between some power of 2 and some power of 3.
+
+    - The gaps between these powers seem to become arbitrarily large, and rarely appear close to each other with larger values.
+    - The vast majority of numbers are likely impossible to express as a difference between a power of 2 and a power of 3. This would suggest that the possible base denominators is a very restricted set.
+
+- The base numerators are the sum of some terms, where each term is the product of some power of 2 and some power of 3.
+
+    - Given the additive nature, any given list length has a minimum base numerator which can be returned. This means that we can search for possible base numerators exhaustively. The same is not true for the base denominators because those use subtraction.
+    - The possible base numerators are more common than the possible base denominators, but they become very spread out for larger and larger values.
+
+- For any given loop, all the base numerators share a greatest common divisor with the base denominator.
+
+    - The base denominators tend to have few prime factors. Statistically, base numerators are most likely to be coprime to the base denominator rather than sharing a factor.
+    - When common factors do appear, they tend to be small. Large greatest common divisors are generally uncommon.
+    - There are four known cases where a greatest common divisor is equal to the base denominator (or its negative). These represent integer solutions to the loop formula. If a fifth case can be found, then the Collatz conjecture is false.
+    - Given the ever-increasing base denominators, and the relative smallness of the greatest common divisors, it is unlikely that a fifth case will be found.
+    - Trying to find such a case is a problem very adjacent to the distribution of primes. This suggests the Collatz conjecture is intimately connected to the mystery of the primes.

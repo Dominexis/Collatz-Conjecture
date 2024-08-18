@@ -1,9 +1,8 @@
-def product(factors: list[int]) -> int:
-    """Takes the product of all the provided factors."""
-    output = 1
-    for factor in factors:
-        output *= factor
-    return output
+from pathlib import Path
+
+
+
+PROGRAM_PATH = Path(__file__).parent
 
 
 
@@ -27,3 +26,17 @@ def prime_factors(value: int) -> dict[int, int]:
         add_factor()
     
     return factors
+
+
+
+def sort_dict(dictionary: dict) -> dict:
+    """
+    Sorts the keys of the provided dictionary object.
+    """
+
+    keys = list(dictionary.keys())
+    keys.sort()
+    output = {}
+    for key in keys:
+        output[key] = dictionary[key]
+    return output

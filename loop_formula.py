@@ -1,5 +1,5 @@
-import generic
 import powers
+import math
 
 
 
@@ -30,7 +30,7 @@ def get_loop_numerator(sequence: list[int]) -> int:
     length = len(sequence)
     return sum([
         powers.POWERS_OF_3[length - i - 1] *
-        generic.product(sequence[:i])
+        math.prod(sequence[:i])
         for i in range(length)
     ])
 
@@ -45,4 +45,4 @@ def get_loop_denominator(sequence: list[int]) -> int:
     Because it is always a power of 2 minus a power of 3, it will never be divisible by 2 or 3.
     """
 
-    return generic.product(sequence) - powers.POWERS_OF_3[len(sequence)]
+    return math.prod(sequence) - powers.POWERS_OF_3[len(sequence)]
