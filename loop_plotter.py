@@ -8,12 +8,14 @@ import math
 
 class LoopInfo(TypedDict):
     denominator: int
+    denominators: list[int]
     denominator_factors: dict[int, int]
     numerator_gcds: dict[int, int]
     numerators: dict[int, int]
 
 class PlotInclusions(TypedDict):
     denominator: bool
+    denominators: bool
     denominator_factors: bool
     numerator_gcds: bool
     numerators: bool
@@ -33,13 +35,16 @@ def get_loop_info(length: int, weight: int, include: PlotInclusions) -> LoopInfo
     if length > weight:
         return
     
+    # Print current status
+    print(f"W {weight}, L {length}                          ", end="\r")
+    
     # Compute denominator
     denominator = powers.POWERS_OF_2[weight] - powers.POWERS_OF_3[length]
     denominator_factors = generic.prime_factors(abs(denominator)) if include["denominator_factors"] else {}
 
     # Compute numerators
     numerators: dict[int, int] = {}
-    if include["numerators"] or include["numerator_gcds"]:
+    if include["numerators"] or include["numerator_gcds"] or include["denominators"]:
         get_numerators(numerators, denominator, [], length, weight, 1, 0)
 
     # Compute numerator GCDs
@@ -52,10 +57,22 @@ def get_loop_info(length: int, weight: int, include: PlotInclusions) -> LoopInfo
             else:
                 numerator_gcds[gcd] = 1
 
+    # Compute denominator list
+    denominators: list[int] = []
+    if include["denominators"]:
+        for numerator in numerators:
+            gcd = numerators[numerator]
+            simplified_denominator = abs(denominator // gcd)
+            if simplified_denominator not in denominators:
+                denominators.append(simplified_denominator)
+        denominators.sort()
+
     # Return output
     output = cast(LoopInfo, {})
     if include["denominator"]:
         output["denominator"] = denominator
+    if include["denominators"]:
+        output["denominators"] = denominators
     if include["denominator_factors"]:
         output["denominator_factors"] = denominator_factors
     if include["numerators"]:

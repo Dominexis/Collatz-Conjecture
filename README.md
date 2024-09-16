@@ -71,6 +71,8 @@ The output data is sorted into the following fields:
 
 - `denominator`: The base denominator computed from that input.
 
+- `denominators`: The list of all possible simplified denominators derived from the base denominator and the base numerators.
+
 - `denominator_factors`: The prime factors of the base denominator. The keys of the array are the factors. The values of the array are the number of times that factor appears.
 
 - `numerators`: The numerators which are computed from all possible loops from that input. The keys of the array are the numerators. The values of the array are the greatest common divisors between the base numerators and the base denominators.
@@ -102,3 +104,7 @@ A sample of the output was generated and written into `loop_plot.json`.
     - There are four known cases where a greatest common divisor is equal to the base denominator (or its negative). These represent integer solutions to the loop formula. If a fifth case can be found, then the Collatz conjecture is false.
     - Given the ever-increasing base denominators, and the relative smallness of the greatest common divisors, it is unlikely that a fifth case will be found.
     - Trying to find such a case is a problem very adjacent to the distribution of primes. This suggests the Collatz conjecture is intimately connected to the mystery of the primes.
+
+## Visual Plotter
+
+The visual plotter will take the output of the loop plotter and generate a file containing a grid array where loop length is plotted horizontally and loop weight is plotted vertically. Each grid cell contains a single number. At the moment, that is the smallest simplified denominator which can be generated with those loop parameters. It is expected that the further out you go, the larger the numbers will generally get, but this is not proven.

@@ -17,11 +17,12 @@ def export_loop_plot(length: int, weight: int, include: loop_plotter.PlotInclusi
 
 if __name__ == "__main__":
     export_loop_plot(
-        15, 15,
+        25, 25,
         {
             "denominator": True,
-            "denominator_factors": True,
+            "denominators": True,
+            "denominator_factors": False,
             "numerators": False,
-            "numerator_gcds": True,
+            "numerator_gcds": False,
         }
     )
