@@ -46,3 +46,32 @@ def get_loop_denominator(sequence: list[int]) -> int:
     """
 
     return math.prod(sequence) - powers.POWERS_OF_3[len(sequence)]
+
+
+
+def prompt():
+    while True:
+        sequence_prompt = input("Sequence (leave blank to exit): ")
+        if not sequence_prompt:
+            return
+        
+        sequence_prompt = sequence_prompt.strip()
+        if sequence_prompt.startswith("["):
+            sequence_prompt = sequence_prompt[1:]
+        if sequence_prompt.endswith("]"):
+            sequence_prompt = sequence_prompt[:-1]
+
+        sequence: list[int] = []
+        for value in sequence_prompt.split(","):
+            value = value.strip()
+            if not value.isnumeric():
+                print(f"ERROR: {value} is not numeric!")
+                continue
+            sequence.append(int(value))
+
+        print(f"Numerator: {get_loop_numerator(sequence)}\nDenominator: {get_loop_denominator(sequence)}\n")
+
+
+
+if __name__ == "__main__":
+    prompt()
