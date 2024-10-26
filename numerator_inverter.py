@@ -37,7 +37,7 @@ def invert_numerator(numerator: int, length: int) -> list[int] | None:
 
 
 
-def invert_numerators(numerator: int) -> list[list[int]]:
+def invert_numerators(numerator: int) -> dict[int, list[int]]:
     """
     Computes all possible sequences of powers of 2 that produce the given numerator in the loop formula.
 
@@ -46,12 +46,12 @@ def invert_numerators(numerator: int) -> list[list[int]]:
     The minimum length is produced with a sequence of only 2's. Such a sequence returns -1 in the loop formula. The minimum length can thus be computed with the negative denominator, which is only two terms.
     """
 
-    sequences: list[list[int]] = []
+    sequences: dict[int, list[int]] = {}
     length = 1
     while True:
         sequence = invert_numerator(numerator, length)
         if sequence is not None:
-            sequences.append(sequence)
+            sequences[length] = sequence
         length += 1
         if powers.POWERS_OF_3[length] - powers.POWERS_OF_2[length] > numerator:
             break
