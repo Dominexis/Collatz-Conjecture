@@ -108,3 +108,11 @@ A sample of the output was generated and written into `loop_plot.json`.
 ## Visual Plotter
 
 The visual plotter will take the output of the loop plotter and generate a file containing a grid array where loop length is plotted horizontally and loop weight is plotted vertically. Each grid cell contains a single number. At the moment, that is the smallest simplified denominator which can be generated with those loop parameters. It is expected that the further out you go, the larger the numbers will generally get, but this is not proven.
+
+## Numerator Inverter
+
+The numerator inverter will take a proposed numerator and return all possible sequences of powers of 2 which will return said numerator in the loop formula. Because the final term of the sequence is not used in the numerator, it is omitted from the return value.
+
+It works by first taking some length and subtracting the largest power of 3 present in a numerator of that length. From there, all remaining terms have a common factor of the first power of 2 in the sequence. Divide by 2 as many times as is possible. The number of divisions is the power of 2 of that term in the sequence. Repeat this process using the next smaller power of 3 until you run out. If at the very end you land on 0, that is a valid sequence and a valid numerator.
+
+A given numerator can be produced with multiple sequences, so the numerator inverter will iterate through all possible lengths to find all possible sequences. There is a strict upper limit for what lengths can produce the given numerator because a given length has a minimum possible numerator that it can produce. If said minimum numerator is greater than the given numerator, it may be skipped.
