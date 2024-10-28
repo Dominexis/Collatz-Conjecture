@@ -40,3 +40,8 @@ def sort_dict(dictionary: dict) -> dict:
     for key in keys:
         output[key] = dictionary[key]
     return output
+
+
+
+def is_int(value: str) -> bool:
+    return value[1 if value.startswith("-") else 0:].isnumeric()

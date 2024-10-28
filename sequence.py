@@ -1,3 +1,8 @@
+import generic
+import random
+
+
+
 def collatz_sequence(value: int, denominator: int = 1, steps: int = 0) -> list[int]:
     """
     Runs the Collatz sequence for the provided number of steps (default is until a loop is reached)
@@ -27,3 +32,34 @@ def collatz_sequence(value: int, denominator: int = 1, steps: int = 0) -> list[i
             break
 
     return sequence
+
+
+
+def prompt():
+    while True:
+        value = input("Starting value (leave blank to exit): ")
+        if not value:
+            return
+        if value.startswith("l"):
+            new_value = ""
+            for i in range(int(value[1:])):
+                new_value += str(random.randint(0, 9))
+            value = new_value
+        if not generic.is_int(value):
+            print(f"ERROR: {value} is not numeric!")
+            continue
+
+        denominator = input("Denominator (leave blank to exit): ")
+        if not denominator:
+            return
+        if not generic.is_int(denominator):
+            print(f"ERROR: {denominator} is not numeric!")
+            continue
+
+        sequence = collatz_sequence(int(value), int(denominator))
+        print(f"Sequence: {sequence}\nSequence length: {len(sequence)}\n")
+
+
+
+if __name__ == "__main__":
+    prompt()
