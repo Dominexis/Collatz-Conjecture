@@ -9,7 +9,9 @@ def show_addition(addend_1: int, addend_2: int, sum: int, length: int) -> str:
 
 def find_pattern(denominator: int, iterations: int, display: bool = False) -> int:
     """
-    In order for a starting number to grow a certain number of times, the least bits of that number must follow a certain pattern. This pattern depends on the denominator group which the number is acting within.
+    In order for a starting number to grow a certain number of times,
+    the least bits of that number must follow a certain pattern.
+    This pattern depends on the denominator group which the number is acting within.
 
     This function reverses 3n+1 /2 over several iterations to determine what that pattern is with some denominator.
     """
