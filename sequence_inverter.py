@@ -18,7 +18,7 @@ def invert_sequence(sequence: list[int] | str, ending: tuple[int, int] = (1, 1))
     """
 
     if isinstance(sequence, str):
-        sequence = generic.covert_steps_to_powers(sequence)
+        sequence = generic.convert_steps_to_powers(sequence)
 
     numerator = ending[0]*math.prod(sequence) - ending[1]*loop_formula.get_loop_numerator(sequence)
     denominator = ending[1]*powers.POWERS_OF_3[len(sequence)]
@@ -46,7 +46,7 @@ def prompt():
                 sequence.append(int(value))
 
         else:
-            sequence = generic.covert_steps_to_powers(sequence_prompt)
+            sequence = generic.convert_steps_to_powers(sequence_prompt)
 
         ending_prompt = input("Ending (leave blank to exit): ")
         if not ending_prompt:

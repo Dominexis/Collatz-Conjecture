@@ -30,7 +30,7 @@ def get_loop_numerator(sequence: list[int] | str) -> int:
     """
 
     if isinstance(sequence, str):
-        sequence = generic.covert_steps_to_powers(sequence)
+        sequence = generic.convert_steps_to_powers(sequence)
 
     length = len(sequence)
     return sum([
@@ -51,7 +51,7 @@ def get_loop_denominator(sequence: list[int] | str) -> int:
     """
 
     if isinstance(sequence, str):
-        sequence = generic.covert_steps_to_powers(sequence)
+        sequence = generic.convert_steps_to_powers(sequence)
 
     return math.prod(sequence) - powers.POWERS_OF_3[len(sequence)]
 
@@ -76,9 +76,13 @@ def prompt():
                 sequence.append(int(value))
 
         else:
-            sequence = generic.covert_steps_to_powers(sequence_prompt)
+            sequence = generic.convert_steps_to_powers(sequence_prompt)
 
-        print(f"Numerator: {get_loop_numerator(sequence)}\nDenominator: {get_loop_denominator(sequence)}\n")
+        loop = get_loop(sequence)
+        print(f"Loop: {loop[0]}/{loop[1]}")
+
+        gcd = math.gcd(loop[0], loop[1])
+        print(f"Reduced: {loop[0]//gcd}/{loop[1]//gcd}\n")
 
 
 

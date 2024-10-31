@@ -48,7 +48,7 @@ def is_int(value: str) -> bool:
 
 
 
-def covert_steps_to_powers(steps: str) -> list[int]:
+def convert_steps_to_powers(steps: str) -> list[int]:
     """
     Converts a steps string consisting of up and down steps (denoted by "u" and "d") to a sequence of powers of 2.
     """
