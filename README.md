@@ -128,7 +128,7 @@ The sequence inverter formula takes a sequence of powers of 2, which represent t
 
 The formula is very similar to the loop formula. The power of 2 term from the denominator is multiplied by the ending and moved to the numerator, which subtracts off the existing numerator.
 
-## Derivation of the Loop Formula
+## Derivation of the Sequence Inverter Formula
 
 The derivation is exactly like the loop formula, except instead of setting the tower to `x`, you set it to the ending `E`.
 
