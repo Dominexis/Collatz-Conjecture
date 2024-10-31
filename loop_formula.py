@@ -1,13 +1,15 @@
+import generic
 import powers
 import math
 
 
 
-def get_loop(sequence: list[int]) -> tuple[int, int]:
+def get_loop(sequence: list[int] | str) -> tuple[int, int]:
     """
     Computes the Collatz loop formula on the provided sequence.
 
     The sequence represents the powers of 2 of the division step of the Collatz sequence, uniquely encoding the loop.
+    It may alternatively be a string of u's and d's representing up steps and down steps.
 
     The result is the number encoded as a numerator/denominator pair such that if you take the Collatz sequence of it,
     the division steps will follow the provided sequence, and it will return to itself after the sequence completes.
@@ -17,7 +19,7 @@ def get_loop(sequence: list[int]) -> tuple[int, int]:
 
 
 
-def get_loop_numerator(sequence: list[int]) -> int:
+def get_loop_numerator(sequence: list[int] | str) -> int:
     """
     Computes the numerator of the Collatz loop formula.
 
@@ -26,6 +28,9 @@ def get_loop_numerator(sequence: list[int]) -> int:
     The first term is always a power of 3, and the last term is always a power of 2,
     thus it will never be divisible by 2 or 3.
     """
+
+    if isinstance(sequence, str):
+        sequence = generic.covert_steps_to_powers(sequence)
 
     length = len(sequence)
     return sum([
@@ -36,7 +41,7 @@ def get_loop_numerator(sequence: list[int]) -> int:
 
 
 
-def get_loop_denominator(sequence: list[int]) -> int:
+def get_loop_denominator(sequence: list[int] | str) -> int:
     """
     Computes the denominator of the Collatz loop formula.
 
@@ -44,6 +49,9 @@ def get_loop_denominator(sequence: list[int]) -> int:
 
     Because it is always a power of 2 minus a power of 3, it will never be divisible by 2 or 3.
     """
+
+    if isinstance(sequence, str):
+        sequence = generic.covert_steps_to_powers(sequence)
 
     return math.prod(sequence) - powers.POWERS_OF_3[len(sequence)]
 
@@ -56,18 +64,19 @@ def prompt():
             return
         
         sequence_prompt = sequence_prompt.strip()
-        if sequence_prompt.startswith("["):
-            sequence_prompt = sequence_prompt[1:]
-        if sequence_prompt.endswith("]"):
-            sequence_prompt = sequence_prompt[:-1]
 
-        sequence: list[int] = []
-        for value in sequence_prompt.split(","):
-            value = value.strip()
-            if not value.isnumeric():
-                print(f"ERROR: {value} is not numeric!")
-                continue
-            sequence.append(int(value))
+        if sequence_prompt.startswith("["):
+            sequence_prompt = sequence_prompt[1:-1]
+            sequence: list[int] = []
+            for value in sequence_prompt.split(","):
+                value = value.strip()
+                if not value.isnumeric():
+                    print(f"ERROR: {value} is not numeric!")
+                    continue
+                sequence.append(int(value))
+
+        else:
+            sequence = generic.covert_steps_to_powers(sequence_prompt)
 
         print(f"Numerator: {get_loop_numerator(sequence)}\nDenominator: {get_loop_denominator(sequence)}\n")
 
