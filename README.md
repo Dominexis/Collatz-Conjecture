@@ -1,4 +1,5 @@
 # Collatz Conjecture
+
 A collection of scripts and tools for studying the Collatz conjecture.
 
 Start with some number `n`. If `n` is odd, multiply it by 3 and add 1. Conversely, if `n` is even, divide it by 2. Repeat this arbitrarily many times.
@@ -8,6 +9,7 @@ The Collatz conjecture states that all natural numbers, when applying the above 
 A more general version of the Collatz conjecture exists to account for 3 loops in the negatives, 0, and the positive loop containing 1.
 
 ## Collatz Loop Formula
+
 A central part of the study is the Collatz loop formula. It takes a sequence of powers of 2, which represent the division steps of the Collatz sequence, and returns the value that will return to itself after said Collatz sequence.
 
 ![Collatz Loop Formula](images/loop_formula.png "Collatz Loop Formula")
@@ -15,6 +17,7 @@ A central part of the study is the Collatz loop formula. It takes a sequence of 
 Note, the above formula is designed with index-1 arrays in mind.
 
 ## Derivation of the Loop Formula
+
 Start with some number `x`, then multiply it by 3 and add 1, then divide it by the first power of 2 in the sequence. This is the first iteration. Repeat this as many times as there are entries in the sequence, creating a nested fraction tower. Set it equal to `x` to make the sequence return to where it started.
 
 ![Collatz Loop Formula Derivation](images/loop_formula_tower.png "Collatz Loop Formula Derivation")
@@ -116,3 +119,23 @@ The numerator inverter will take a proposed numerator and return all possible se
 It works by first taking some length and subtracting the largest power of 3 present in a numerator of that length. From there, all remaining terms have a common factor of the first power of 2 in the sequence. Divide by 2 as many times as is possible. The number of divisions is the power of 2 of that term in the sequence. Repeat this process using the next smaller power of 3 until you run out. If at the very end you land on 0, that is a valid sequence and a valid numerator.
 
 A given numerator can be produced with multiple sequences, so the numerator inverter will iterate through all possible lengths to find all possible sequences. There is a strict upper limit for what lengths can produce the given numerator because a given length has a minimum possible numerator that it can produce. If said minimum numerator is greater than the given numerator, it may be skipped.
+
+## Sequence Inverter Formula
+
+The sequence inverter formula takes a sequence of powers of 2, which represent the division steps of the Collatz sequence, and returns the value that will land on the provided ending value after said Collatz sequence.
+
+![Collatz Sequence Inverter Formula](images/sequence_inverter_formula.png "Collatz Sequence Inverter Formula")
+
+The formula is very similar to the loop formula. The power of 2 term from the denominator is multiplied by the ending and moved to the numerator, which subtracts off the existing numerator.
+
+## Derivation of the Loop Formula
+
+The derivation is exactly like the loop formula, except instead of setting the tower to `x`, you set it to the ending `E`.
+
+![Collatz Sequence Inverter Formula Derivation](images/sequence_inverter_formula_tower.png "Collatz Sequence Inverter Formula Derivation")
+
+The simplification procedure is the same.
+
+![Collatz Sequence Inverter Formula Derivation](images/sequence_inverter_formula_pattern.png "Collatz Sequence Inverter Formula Derivation")
+
+Abstracting these patterns results in the Collatz sequence inverter formula.
