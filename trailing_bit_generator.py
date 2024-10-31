@@ -135,7 +135,7 @@ def prompt_set():
 
         for denominator in range(1, 101, 2):
             value = generate_trailing_bits(sequence, int(denominator))
-            print(f"{" "*(4-len(str(denominator)))}{denominator}: {" "*(1+len(sequence_steps)-len(format(value, "b")))}{format(value, "b").replace("1", "-")}")
+            print(f"{" "*(4-len(str(denominator)))}{denominator}: {" "*(1+len(sequence_steps)-len(format(value, "b")))}{format(value, "b").replace("0", "-")}")
 
 
 
