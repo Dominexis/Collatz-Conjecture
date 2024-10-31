@@ -139,3 +139,23 @@ The simplification procedure is the same.
 ![Collatz Sequence Inverter Formula Derivation](images/sequence_inverter_formula_pattern.png "Collatz Sequence Inverter Formula Derivation")
 
 Abstracting these patterns results in the Collatz sequence inverter formula.
+
+## Trailing Bit Generator
+
+When a number is iterated through the Collatz function, the least significant bits affect the most significant bits. The multiplication and addition steps strictly move information from right to left. For the division step, only divisions by 2 occur, which in binary, is a simple bitshift to the right.
+
+For instance, the first step, whether up or down, is determined by the parity of the least significant bit. The immediate division by 2 causes a bitshift to the right, so then the parity of the second bit now determines the step. So the first two steps were determined by the first two bits (step here referring to an up or down step ending in a division by 2). Generally, the first `n` steps are determined by the first `n` bits. Because of the multiplication and addition steps, they must be taken as a set; so you cannot, for instance, take the third bit on its own to determine the third step.
+
+The trailing bit generator reverses this process and takes a sequence of steps and computes the trailing bits which will produce that sequence of steps when iterated through the Collatz function. It requires assigning the denominator in advance as that will change how the reversal process goes.
+
+## Known Attributes of the Trailing Bit Generator
+
+- A given sequence of steps has infinitely many instances as the sequence appearing in a larger sequence depends only on the least significant bits, allowing the most significant bits to be assigned arbitrarily without changing the immediate steps.
+
+- If the sequence is infinite in length, the trailing bits will become a 2-adic number representing the actual value. If the sequence repeats itself, the result will be the number from the loop encoded by said sequence.
+
+- Because of the above point, all repeating sequences must belong to loops, meaning that if there exists a divergent sequence, the steps must be non-repeating.
+
+- Because of the non-repeating nature of such a sequence, if it were fed through the trailing bit generator, the resulting 2-adic number would also be non-repeating, and would thus represent an irrational number. Thus, any sequence capable of diverging would have to consist of irrational numbers.
+
+- Because of the above point, there exists no divergent sequences within the rationals, save for the trivial cases of rationals with even denominators.

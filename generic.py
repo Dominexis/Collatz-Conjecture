@@ -83,3 +83,22 @@ def convert_powers_to_steps(powers: list[int]) -> str:
             steps += "d"
     
     return steps
+
+
+
+def convert_sequence_to_powers(sequence: list[int]) -> list[int]:
+    powers: list[int] = []
+
+    for value in sequence:
+        if value%2:
+            powers.append(1)
+        else:
+            if len(powers) > 0:
+                powers[-1] *= 2
+            else:
+                powers.append(2)
+
+    if powers[-1] == 1:
+        powers.pop()
+
+    return powers
