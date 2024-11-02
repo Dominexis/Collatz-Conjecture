@@ -2,7 +2,7 @@ import generic
 
 
 
-def generate_trailing_bits(sequence: list[int] | str, denominator: int, display: bool = False, details: bool = False) -> int:
+def generate_trailing_bits(sequence: list[int] | str, denominator: int, display: bool = False, details: bool = False) -> tuple[int, int]:
     """
     Because information flows from the least significant bits to the most significant in a Collatz sequence,
     the least significant bits dictate the steps in the sequence itself.
@@ -51,8 +51,8 @@ def generate_trailing_bits(sequence: list[int] | str, denominator: int, display:
         value = new_value
 
     if display:
-        print(f"Trailing bits using denominator {denominator}: {modulo}k + {value}, {format(value, "b")}\n")
-    return value
+        print(f"Trailing bits using denominator {denominator}: {modulo}k + {value}, {format_to_binary((value, modulo))}\n")
+    return value, modulo
 
 
 
@@ -73,6 +73,11 @@ def show_sum(addend_1: tuple[str, int], addend_2: tuple[str, int], total: tuple[
     print(f"{total[0]}:{" "*(max_title_length-len(total[0]))} = {" "*(max_bin_length-len(total_bin))}{total_bin}")
     print(f"{true_title}:{" "*(max_title_length-len(true_title))}   {" "*(max_bin_length-len(true_sum_bin))}{true_sum_bin}")
     print("")
+
+
+
+def format_to_binary(value: tuple[int, int]) -> str:
+    return format(value[0] + value[1], "b")[1:]
 
 
 
@@ -115,7 +120,8 @@ def prompt_set():
 
         for denominator in range(1, 101, 2):
             value = generate_trailing_bits(sequence, int(denominator))
-            print(f"{" "*(4-len(str(denominator)))}{denominator}: {" "*(1+len(sequence_steps)-len(format(value, "b")))}{format(value, "b").replace("0", "-")}")
+            binary_string = format_to_binary(value)
+            print(f"{" "*(4-len(str(denominator)))}{denominator}: {" "*(1+len(sequence_steps)-len(binary_string))}{binary_string.replace("0", "-")}")
 
 
 
@@ -144,7 +150,7 @@ def prompt_construction():
 
         for i in range(len(sequence)):
             value = generate_trailing_bits(sequence[:i+1], int(denominator))
-            binary_string = format(value, "b")
+            binary_string = format_to_binary(value)
             binary_strings.append(binary_string)
             max_string_length = max(max_string_length, len(binary_string))
 
