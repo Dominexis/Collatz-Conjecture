@@ -2,26 +2,6 @@ import generic
 
 
 
-def show_sum(addend_1: tuple[str, int], addend_2: tuple[str, int], total: tuple[str, int]):
-    true_sum = addend_1[1] + addend_2[1]
-    true_title = "true"
-    
-    addend_1_bin = format(addend_1[1], "b")
-    addend_2_bin = format(addend_2[1], "b")
-    total_bin = format(total[1], "b")
-    true_sum_bin = format(true_sum, "b")
-
-    max_title_length = max(len(addend_1[0]), len(addend_2[0]), len(total[0]), len(true_title))
-    max_bin_length = max(len(addend_1_bin), len(addend_2_bin), len(total_bin), len(true_sum_bin))
-
-    print(f"{addend_1[0]}:{" "*(max_title_length-len(addend_1[0]))}   {" "*(max_bin_length-len(addend_1_bin))}{addend_1_bin}")
-    print(f"{addend_2[0]}:{" "*(max_title_length-len(addend_2[0]))} + {" "*(max_bin_length-len(addend_2_bin))}{addend_2_bin}")
-    print(f"{total[0]}:{" "*(max_title_length-len(total[0]))} = {" "*(max_bin_length-len(total_bin))}{total_bin}")
-    print(f"{true_title}:{" "*(max_title_length-len(true_title))}   {" "*(max_bin_length-len(true_sum_bin))}{true_sum_bin}")
-    print("")
-
-
-
 def generate_trailing_bits(sequence: list[int] | str, denominator: int, display: bool = False, details: bool = False) -> int:
     """
     Because information flows from the least significant bits to the most significant in a Collatz sequence,
@@ -76,26 +56,36 @@ def generate_trailing_bits(sequence: list[int] | str, denominator: int, display:
 
 
 
+def show_sum(addend_1: tuple[str, int], addend_2: tuple[str, int], total: tuple[str, int]):
+    true_sum = addend_1[1] + addend_2[1]
+    true_title = "true"
+    
+    addend_1_bin = format(addend_1[1], "b")
+    addend_2_bin = format(addend_2[1], "b")
+    total_bin = format(total[1], "b")
+    true_sum_bin = format(true_sum, "b")
+
+    max_title_length = max(len(addend_1[0]), len(addend_2[0]), len(total[0]), len(true_title))
+    max_bin_length = max(len(addend_1_bin), len(addend_2_bin), len(total_bin), len(true_sum_bin))
+
+    print(f"{addend_1[0]}:{" "*(max_title_length-len(addend_1[0]))}   {" "*(max_bin_length-len(addend_1_bin))}{addend_1_bin}")
+    print(f"{addend_2[0]}:{" "*(max_title_length-len(addend_2[0]))} + {" "*(max_bin_length-len(addend_2_bin))}{addend_2_bin}")
+    print(f"{total[0]}:{" "*(max_title_length-len(total[0]))} = {" "*(max_bin_length-len(total_bin))}{total_bin}")
+    print(f"{true_title}:{" "*(max_title_length-len(true_title))}   {" "*(max_bin_length-len(true_sum_bin))}{true_sum_bin}")
+    print("")
+
+
+
 def prompt_single():
     while True:
         sequence_prompt = input("Sequence (leave blank to exit): ")
         if not sequence_prompt:
             return
         
-        sequence_prompt = sequence_prompt.strip()
-
-        if sequence_prompt.startswith("["):
-            sequence_prompt = sequence_prompt[1:-1]
-            sequence: list[int] = []
-            for value in sequence_prompt.split(","):
-                value = value.strip()
-                if not value.isnumeric():
-                    print(f"ERROR: {value} is not numeric!")
-                    continue
-                sequence.append(int(value))
-
-        else:
-            sequence = generic.convert_steps_to_powers(sequence_prompt)
+        try:
+            sequence = generic.extract_sequence_from_prompt(sequence_prompt)
+        except:
+            continue
 
 
         denominator = input("Denominator (leave blank to exit): ")
@@ -115,20 +105,10 @@ def prompt_set():
         if not sequence_prompt:
             return
         
-        sequence_prompt = sequence_prompt.strip()
-
-        if sequence_prompt.startswith("["):
-            sequence_prompt = sequence_prompt[1:-1]
-            sequence: list[int] = []
-            for value in sequence_prompt.split(","):
-                value = value.strip()
-                if not value.isnumeric():
-                    print(f"ERROR: {value} is not numeric!")
-                    continue
-                sequence.append(int(value))
-
-        else:
-            sequence = generic.convert_steps_to_powers(sequence_prompt)
+        try:
+            sequence = generic.extract_sequence_from_prompt(sequence_prompt)
+        except:
+            continue
 
         sequence_steps = generic.convert_powers_to_steps(sequence)
 

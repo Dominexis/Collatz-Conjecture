@@ -33,20 +33,10 @@ def prompt():
         if not sequence_prompt:
             return
         
-        sequence_prompt = sequence_prompt.strip()
-
-        if sequence_prompt.startswith("["):
-            sequence_prompt = sequence_prompt[1:-1]
-            sequence: list[int] = []
-            for value in sequence_prompt.split(","):
-                value = value.strip()
-                if not value.isnumeric():
-                    print(f"ERROR: {value} is not numeric!")
-                    continue
-                sequence.append(int(value))
-
-        else:
-            sequence = generic.convert_steps_to_powers(sequence_prompt)
+        try:
+            sequence = generic.extract_sequence_from_prompt(sequence_prompt)
+        except:
+            continue
 
         ending_prompt = input("Ending (leave blank to exit): ")
         if not ending_prompt:
