@@ -119,10 +119,48 @@ def prompt_set():
 
 
 
+def prompt_construction():
+    while True:
+        sequence_prompt = input("Sequence (leave blank to exit): ")
+        if not sequence_prompt:
+            return
+
+        try:
+            sequence = generic.extract_sequence_from_prompt(sequence_prompt)
+        except:
+            continue
+
+
+        denominator = input("Denominator (leave blank to exit): ")
+        if not denominator:
+            return
+        if not denominator.isnumeric():
+            print(f"ERROR: {denominator} is not numeric!")
+            continue
+
+
+        binary_strings: list[str] = []
+        max_string_length = 0
+
+        for i in range(len(sequence)):
+            value = generate_trailing_bits(sequence[:i+1], int(denominator))
+            binary_string = format(value, "b")
+            binary_strings.append(binary_string)
+            max_string_length = max(max_string_length, len(binary_string))
+
+        
+        for i in range(len(sequence)):
+            progress = sequence[:i+1]
+            binary_string = binary_strings[i]
+            print(f"{" "*(max_string_length - len(binary_string))}{binary_string} : {progress}")
+
+
+
 def prompt():
     while True:
         print("1) Single")
         print("2) Set")
+        print("3) Construction")
         select = input("Select (leave blank to exit): ")
 
         if not select:
@@ -132,6 +170,8 @@ def prompt():
             prompt_single()
         if select == "2":
             prompt_set()
+        if select == "3":
+            prompt_construction()
 
 
 
