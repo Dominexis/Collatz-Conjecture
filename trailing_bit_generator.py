@@ -145,11 +145,13 @@ def prompt_construction():
             continue
 
 
+        values: list[tuple[int, int]] = []
         binary_strings: list[str] = []
         max_string_length = 0
 
         for i in range(len(sequence)):
             value = generate_trailing_bits(sequence[:i+1], int(denominator))
+            values.append(value)
             binary_string = format_to_binary(value)
             binary_strings.append(binary_string)
             max_string_length = max(max_string_length, len(binary_string))
@@ -159,6 +161,28 @@ def prompt_construction():
             progress = sequence[:i+1]
             binary_string = binary_strings[i]
             print(f"{" "*(max_string_length - len(binary_string))}{binary_string} : {progress}")
+
+
+        lines: list[str] = []
+        for i in range(len(sequence)):
+            value = values[i]
+            parts: list[str] = []
+            while True:
+                binary_string = format_to_binary(value)
+                parts.append(f"{" "*(max_string_length - len(binary_string))}{binary_string}")
+                if value[1] <= 2:
+                    break
+                new_value = (value[0]*3 + 1)%value[1]
+                modulo = value[1]
+                while new_value%2 == 0:
+                    new_value //= 2
+                    modulo //= 2
+                value = (new_value, modulo)
+            lines.append(" ".join(parts))
+        
+        with (generic.PROGRAM_PATH / "trailing_bits.txt").open("w", encoding="utf-8") as file:
+            file.write("\n".join(lines))
+
 
 
 
