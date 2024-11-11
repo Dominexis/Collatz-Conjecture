@@ -154,8 +154,6 @@ The trailing bit generator reverses this process and takes a sequence of steps a
 
 - If the sequence is infinite in length, the trailing bits will become a 2-adic number representing the actual value. If the sequence repeats itself, the result will be the number from the loop encoded by said sequence.
 
-- Because of the above point, all repeating sequences must belong to loops, meaning that if there exists a divergent sequence, the steps must be non-repeating.
+- Because of the above point, all repeating sequences must belong to loops, meaning that if there exists a divergent sequence, the steps must be unrepeating.
 
-- Because of the non-repeating nature of such a sequence, if it were fed through the trailing bit generator, the resulting 2-adic number would also be non-repeating, and would thus represent an irrational number. Thus, any sequence capable of diverging would have to consist of irrational numbers.
-
-- Because of the above point, there exists no divergent sequences within the rationals, save for the trivial cases of rationals with even denominators.
+- It is an unsolved problem whether unrepeating sequences will always generate unrepeating 2-adics, or whether they can generate repeating 2-adics in some cases. Solving this problem is closely related to solving the problem of loop distribution.
