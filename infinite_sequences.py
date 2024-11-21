@@ -8,15 +8,27 @@ NORMAL_SEQUENCE: list[int] = []
 for i in range(4096):
     for bit in format(i, "b"):
         NORMAL_SEQUENCE.extend([2] if bit == "0" else [4])
-print(NORMAL_SEQUENCE)
+
+
+
+def large_division(ratio: tuple[int, int], digits: int) -> str:
+    quotient = str(ratio[0]*powers.POWERS_OF_10[digits] // ratio[1])
+    quotient = "0"*(digits - len(quotient)) + quotient
+    quotient = quotient[:-digits] + "." + quotient[-digits:]
+    for i in range(len(quotient)):
+        if quotient.endswith("0"):
+            quotient = quotient[:-1]
+        else:
+            break
+    return quotient
 
 
 
 def expanding_powers():
     for i in range(100):
         result = loop_formula.get_loop(powers.POWERS_OF_2[1:i+2])
-        # print(f"[2 ... {powers.POWERS_OF_2[i+1]}]: {result[0]/result[1]}, {result[0]}/{result[1]}")
-        print(f"[2 ... {powers.POWERS_OF_2[i+1]}]: {result[0]/result[1]}")
+        # print(f"[2 ... {powers.POWERS_OF_2[i+1]}]: {large_division(result, 100)}, {result[0]}/{result[1]}")
+        print(f"[2 ... {powers.POWERS_OF_2[i+1]}]: {large_division(result, 100)}")
 
 
 
@@ -44,7 +56,7 @@ def normal_of_2_and_4_loop():
     for i in range(0, len(NORMAL_SEQUENCE), 250):
         sequence = NORMAL_SEQUENCE[:i+1]
         result = loop_formula.get_loop(sequence)
-        print(f"{len(sequence)}: {result[0]/result[1]}")
+        print(f"{len(sequence)}: {large_division(result, 100)}")
 
 
 
