@@ -1,4 +1,4 @@
-MAX_POWERS = 1024
+MAX_POWERS = 16384
 """Determines the length of the powers lists."""
 
 POWERS_OF_2: list[int] = [1]
