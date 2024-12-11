@@ -78,7 +78,7 @@ def division(numerator: int, denominator: int, display: bool = False) -> tuple[l
     # Logic for negation
     if is_negative:
         number = powers.POWERS_OF_2[len(bits)] - convert_bits_to_int(bits)
-        bits = convert_int_to_bits(number)
+        bits = convert_int_to_bits(number, len(bits))
 
     return bits, cycle_start
 
@@ -90,8 +90,9 @@ def convert_bits_to_string(bits: list[int]) -> str:
         chars.append(str(bit))
     return "".join(chars)
 
-def convert_int_to_bits(number: int) -> list[int]:
+def convert_int_to_bits(number: int, length: int = 0) -> list[int]:
     binary_string = format(number, "b")
+    binary_string += "0"*(length - len(binary_string))
     bits: list[int] = []
     for i in range(len(binary_string)-1, -1, -1):
         bits.append(int(binary_string[i]))
@@ -111,14 +112,18 @@ def prompt_division():
         numerator = input("Numerator (leave blank to exit): ")
         if not numerator:
             return
-        if not numerator.isnumeric():
+        try:
+            int(numerator)
+        except:
             print(f"ERROR: {numerator} is not numeric!")
             continue
 
         denominator = input("Denominator (leave blank to exit): ")
         if not denominator:
             return
-        if not denominator.isnumeric():
+        try:
+            int(denominator)
+        except:
             print(f"ERROR: {denominator} is not numeric!")
             continue
 

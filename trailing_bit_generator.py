@@ -1,4 +1,5 @@
 import generic
+import powers
 
 
 
@@ -185,12 +186,128 @@ def prompt_construction():
 
 
 
+def prompt_exhaustive(compact: bool):
+    while True:
+        depth_prompt = input("Depth (leave blank to exit): ")
+        if not depth_prompt:
+            return
+        if not depth_prompt.isnumeric():
+            print(f"ERROR: {depth_prompt} is not numeric!")
+            continue
+        depth = int(depth_prompt)
+
+        power_limit_prompt = input("Power limit (leave blank to exit): ")
+        if not power_limit_prompt:
+            return
+        if not power_limit_prompt.isnumeric():
+            print(f"ERROR: {power_limit_prompt} is not numeric!")
+            continue
+        power_limit = int(power_limit_prompt)
+
+        print("")
+        exhaustive_layer([], depth, power_limit, compact)
+
+
+def exhaustive_layer(sequence: list[int], depth: int, power_limit: int, compact: bool):
+    sequence.append(1)
+    if compact and len(sequence) == depth:
+        sequence[-1] = powers.POWERS_OF_2[4*power_limit]
+        value = generate_trailing_bits(sequence, 1)
+        binary_string = format_to_binary(value)
+
+        print(f"{binary_string[1:4*power_limit].replace("0", "-")}: {sequence}")
+
+    else:
+        for i in range(1, power_limit+1):
+            sequence[-1] = powers.POWERS_OF_2[i]
+            value = generate_trailing_bits(sequence, 1)
+            binary_string = format_to_binary(value)
+
+            if not compact:
+                print(f"{(depth*power_limit+1 - len(binary_string))*" "}{binary_string}: {sequence}")
+            if len(sequence) < depth:
+                exhaustive_layer(sequence.copy(), depth, power_limit, compact)
+
+
+
+def cycle_finder(display: bool = False) -> list[str]:
+    cycles: list[str] = ["0"]
+    power_of_4 = 1
+    for power_of_3 in range(1, 10):
+        while True:
+            if (powers.POWERS_OF_2[power_of_4*2] - 1) % powers.POWERS_OF_3[power_of_3] == 0:
+                value = (powers.POWERS_OF_2[power_of_4*2] - 1) // powers.POWERS_OF_3[power_of_3]
+                binary_string = format(value, "b")
+                binary_string = "0"*(power_of_4*2 - len(binary_string)) + binary_string
+                cycles.append(binary_string)
+                if display:
+                    print(f"\n{power_of_3}, {power_of_4}: {binary_string.replace("0", "-")}")
+                break
+            power_of_4 += 1
+    return cycles
+
+
+
+def prompt_offset_finder():
+    while True:
+        depth_prompt = input("Depth (leave blank to exit): ")
+        if not depth_prompt:
+            return
+        if not depth_prompt.isnumeric():
+            print(f"ERROR: {depth_prompt} is not numeric!")
+            continue
+        depth = int(depth_prompt)
+
+        power_limit_prompt = input("Power limit (leave blank to exit): ")
+        if not power_limit_prompt:
+            return
+        if not power_limit_prompt.isnumeric():
+            print(f"ERROR: {power_limit_prompt} is not numeric!")
+            continue
+        power_limit = int(power_limit_prompt)
+
+        cycles = cycle_finder()
+
+        print("")
+        offset_finder_layer([], depth, power_limit, 1, cycles)
+
+
+def offset_finder_layer(sequence: list[int], depth: int, power_limit: int, length: int, cycles: list[str]):
+    sequence.append(1)
+    if len(sequence) == depth:
+        sequence[-1] = powers.POWERS_OF_2[32]
+        value = generate_trailing_bits(sequence, 1)
+        binary_string = format_to_binary(value)
+
+        cycle = cycles[depth]
+        segment = binary_string[32 - min(31, len(cycle)):32]
+        offset = (len(cycle)*2 - ((cycle*2).find(segment) + len(segment))) % len(cycle)
+
+        print(f"Anc: {length}, Rel: {offset}, Abs: {length + offset}: {sequence}, {segment}")
+
+    else:
+        for i in range(1, power_limit+1):
+            sequence[-1] = powers.POWERS_OF_2[i]
+            length += 1
+            value = generate_trailing_bits(sequence, 1)
+            binary_string = format_to_binary(value)
+
+            if len(sequence) < depth:
+                offset_finder_layer(sequence.copy(), depth, power_limit, length, cycles)
+
+
+
+
 
 def prompt():
     while True:
         print("1) Single")
         print("2) Set")
         print("3) Construction")
+        print("4) Exhaustive")
+        print("5) Exhaustive (compact)")
+        print("6) Cycle finder")
+        print("7) Offset finder")
         select = input("Select (leave blank to exit): ")
 
         if not select:
@@ -202,6 +319,14 @@ def prompt():
             prompt_set()
         if select == "3":
             prompt_construction()
+        if select == "4":
+            prompt_exhaustive(False)
+        if select == "5":
+            prompt_exhaustive(True)
+        if select == "6":
+            cycle_finder(True)
+        if select == "7":
+            prompt_offset_finder()
 
 
 
