@@ -1,5 +1,6 @@
 import generic
 import powers
+import json
 
 
 
@@ -186,6 +187,8 @@ def prompt_construction():
 
 
 
+
+# These will print out all the trailing bits up to a certain power limit within a certain depth
 def prompt_exhaustive(compact: bool):
     while True:
         depth_prompt = input("Depth (leave blank to exit): ")
@@ -207,7 +210,6 @@ def prompt_exhaustive(compact: bool):
         print("")
         exhaustive_layer([], depth, power_limit, compact)
 
-
 def exhaustive_layer(sequence: list[int], depth: int, power_limit: int, compact: bool):
     sequence.append(1)
     if compact and len(sequence) == depth:
@@ -227,24 +229,6 @@ def exhaustive_layer(sequence: list[int], depth: int, power_limit: int, compact:
                 print(f"{(depth*power_limit+1 - len(binary_string))*" "}{binary_string}: {sequence}")
             if len(sequence) < depth:
                 exhaustive_layer(sequence.copy(), depth, power_limit, compact)
-
-
-
-def cycle_finder(display: bool = False) -> list[str]:
-    cycles: list[str] = ["0"]
-    power_of_4 = 1
-    for power_of_3 in range(1, 10):
-        while True:
-            if (powers.POWERS_OF_2[power_of_4*2] - 1) % powers.POWERS_OF_3[power_of_3] == 0:
-                value = (powers.POWERS_OF_2[power_of_4*2] - 1) // powers.POWERS_OF_3[power_of_3]
-                binary_string = format(value, "b")
-                binary_string = "0"*(power_of_4*2 - len(binary_string)) + binary_string
-                cycles.append(binary_string)
-                if display:
-                    print(f"\n{power_of_3}, {power_of_4}: {binary_string.replace("0", "-")}")
-                break
-            power_of_4 += 1
-    return cycles
 
 
 
@@ -297,6 +281,105 @@ def offset_finder_layer(sequence: list[int], depth: int, power_limit: int, lengt
 
 
 
+def prompt_exhaustive_offset_finder():
+    while True:
+        depth_prompt = input("Depth (leave blank to exit): ")
+        if not depth_prompt:
+            return
+        if not depth_prompt.isnumeric():
+            print(f"ERROR: {depth_prompt} is not numeric!")
+            continue
+        depth = int(depth_prompt)
+
+        cycles = cycle_finder()
+        cycle = cycles[depth]
+        sequence = [2 for i in range(depth - 1)]
+        sequence[0] = 4
+        offsets = [[] for i in range(depth - 1)]
+
+        base_offset = get_offset(sequence, cycle)
+
+        for i in range(depth - 2, -1, -1):
+            while True:
+                offset = (get_offset(sequence, cycle) - base_offset) % len(cycle)
+                # print(f"{offset}: {sequence}")
+
+                if i != depth - 2:
+                    for j in range(depth - 2, i, -1):
+                        offset_array = offsets[j]
+                        offset = (len(offset_array) - offset_array.index(offset)) % len(offset_array)
+
+                if offset not in offsets[i]:
+                    offsets[i].append(offset)
+                else:
+                    break
+
+                sequence[i] *= 2
+            sequence[i] = 2
+            print(f"\n{i}: {offsets[i]}")
+
+
+
+
+# This function will compute the cycles of bits for a set number of depths
+def cycle_finder(display: bool = False) -> list[str]:
+    cycles: list[str] = ["0"]
+    power_of_4 = 1
+    for power_of_3 in range(1, 10):
+        while True:
+            if (powers.POWERS_OF_2[power_of_4*2] - 1) % powers.POWERS_OF_3[power_of_3] == 0:
+                value = (powers.POWERS_OF_2[power_of_4*2] - 1) // powers.POWERS_OF_3[power_of_3]
+                binary_string = format(value, "b")
+                binary_string = "0"*(power_of_4*2 - len(binary_string)) + binary_string
+                cycles.append(binary_string)
+                if display:
+                    print(f"\n{power_of_3}, {power_of_4}: {binary_string.replace("0", "-")}")
+                break
+            power_of_4 += 1
+    return cycles
+
+# This function will get the phase of the segment within the given cycle
+def get_offset(sequence: list[int], cycle: str) -> int:
+    sequence = sequence.copy()
+    sequence.append(powers.POWERS_OF_2[32])
+    value = generate_trailing_bits(sequence, 1)
+    binary_string = format_to_binary(value)
+    segment = binary_string[32 - min(31, len(cycle)):32]
+    offset = (len(cycle)*2 - ((cycle*2).find(segment) + len(segment))) % len(cycle)
+    return offset
+
+# Computes a multidimensional array of every possible offset up to a certain depth limit
+def compute_offset_array(depth_limit: int) -> list[dict[tuple, list[int]]]:
+    offset_array: list[dict[tuple, list[int]]] = [{} for i in range(depth_limit + 1)]
+    offset_array[0] = {(): [0, 0]}
+    cycles = cycle_finder()
+    compute_offset_array_layer(offset_array, [], depth_limit, 1, cycles)
+    return offset_array
+
+def compute_offset_array_layer(offset_array: list[dict[tuple, list[int]]], sequence: list[int], depth_limit: int, depth: int, cycles: list[str]):
+    sequence.append(1)
+
+    for i in range(1, 2*powers.POWERS_OF_3[depth - 1] + 1):
+        sequence[-1] = powers.POWERS_OF_2[i]
+        offset = get_offset(sequence, cycles[depth + 1])
+        offset_array[depth][tuple(sequence)] = [offset, (offset_array[depth - 1][tuple(sequence[:-1])][0] + i)%(2*powers.POWERS_OF_3[depth - 1])]
+
+        if depth < depth_limit:
+            compute_offset_array_layer(offset_array, sequence.copy(), depth_limit, depth + 1, cycles)
+
+def export_offset_array(depth_limit: int):
+    offset_array = compute_offset_array(depth_limit)
+    converted_offset_array: list[dict[str, str]] = []
+    for entry in offset_array:
+        converted_offset_array.append({})
+        for key in entry:
+            converted_offset_array[-1][str(key)] = f"_ARRAY{entry[key]}ARRAY_"
+    with (generic.PROGRAM_PATH / "offset_array.json").open("w", encoding="utf-8") as file:
+        file.write(
+            json.dumps(converted_offset_array, indent=4).replace('"_ARRAY', "").replace('ARRAY_"', "")
+        )
+
+
 
 
 def prompt():
@@ -308,6 +391,8 @@ def prompt():
         print("5) Exhaustive (compact)")
         print("6) Cycle finder")
         print("7) Offset finder")
+        print("8) Exhaustive offset finder")
+        print("9) Export offset array")
         select = input("Select (leave blank to exit): ")
 
         if not select:
@@ -327,6 +412,10 @@ def prompt():
             cycle_finder(True)
         if select == "7":
             prompt_offset_finder()
+        if select == "8":
+            prompt_exhaustive_offset_finder()
+        if select == "9":
+            export_offset_array(4)
 
 
 
