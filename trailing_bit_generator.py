@@ -346,6 +346,7 @@ def get_offset(sequence: list[int], cycle: str) -> int:
     binary_string = format_to_binary(value)
     segment = binary_string[32 - min(31, len(cycle)):32]
     offset = (len(cycle)*2 - ((cycle*2).find(segment) + len(segment))) % len(cycle)
+    # print(f"{sequence}, {offset}, {binary_string}, segment: {segment}, cycle: {cycle}")
     return offset
 
 # Computes a multidimensional array of every possible offset up to a certain depth limit
@@ -381,6 +382,40 @@ def export_offset_array(depth_limit: int):
 
 
 
+def constructive_trailing_bit_generator_test(depth: int, offset: int):
+    cycle_period = 2*powers.POWERS_OF_3[depth - 1]
+    previous_cycle_period = 2*powers.POWERS_OF_3[depth - 2]
+
+    # This is the amount that the number is shifted by the left by to encode the offset of the previous section
+    offset_size = previous_cycle_period*3 + offset + (1 if depth <= 2 else 0)
+    offset_factor = powers.POWERS_OF_2[offset_size - 1]
+    # This is the power of 3 associated with the previous section
+    depth_power = powers.POWERS_OF_3[depth - 1]
+
+    power_of_4 = cycle_period + 1
+    while True:
+        # This is the initial offset test
+        offset_test = powers.POWERS_OF_2[power_of_4*2]
+        numerator = (offset_test - 1)//3 * offset_factor - 1
+        if numerator % depth_power == 0:
+            value = numerator // depth_power
+            binary_string = format_to_binary((value, offset_test*offset_factor))
+            print(f"Depth: {depth}, previous offset: {offset}, offset: {(cycle_period - power_of_4*2 + 1)%cycle_period}, {binary_string[:-offset_size]} {binary_string[-offset_size:]}")
+            # print(f"({offset}, {(cycle_period - power_of_4*2 + 1)%cycle_period}), ", end="")
+            break
+
+        power_of_4 += 1
+
+def trigger_constructive_test():
+    for depth in range(2, 6):
+        # print("\n[", end="")
+        print("")
+        for offset in range(0, 2*powers.POWERS_OF_3[depth - 2]):
+            constructive_trailing_bit_generator_test(depth, offset)
+        # print("]")
+
+
+
 
 def prompt():
     while True:
@@ -393,6 +428,7 @@ def prompt():
         print("7) Offset finder")
         print("8) Exhaustive offset finder")
         print("9) Export offset array")
+        print("10) Constructive test")
         select = input("Select (leave blank to exit): ")
 
         if not select:
@@ -415,7 +451,9 @@ def prompt():
         if select == "8":
             prompt_exhaustive_offset_finder()
         if select == "9":
-            export_offset_array(4)
+            export_offset_array(3)
+        if select == "10":
+            trigger_constructive_test()
 
 
 
