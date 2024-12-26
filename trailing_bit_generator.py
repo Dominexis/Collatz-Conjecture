@@ -416,6 +416,20 @@ def trigger_constructive_test():
 
 
 
+def constructive_trailing_bit_generator(sequence: list[int] | str) -> str:
+    
+    if isinstance(sequence, str):
+        sequence = generic.convert_steps_to_powers(sequence)
+
+    output = "1"
+
+    for step in sequence:
+        pass
+
+    return output
+
+
+
 
 def prompt():
     while True:
