@@ -4,7 +4,7 @@ import json
 
 
 
-def generate_trailing_bits(sequence: list[int] | str, denominator: int, display: bool = False, details: bool = False) -> tuple[int, int]:
+def generate_trailing_bits(sequence: list[int] | str, denominator: int = 1, display: bool = False, details: bool = False) -> tuple[int, int]:
     """
     Because information flows from the least significant bits to the most significant in a Collatz sequence,
     the least significant bits dictate the steps in the sequence itself.
@@ -421,12 +421,108 @@ def constructive_trailing_bit_generator(sequence: list[int] | str) -> str:
     if isinstance(sequence, str):
         sequence = generic.convert_steps_to_powers(sequence)
 
-    output = "1"
+    # Handle edge case of the first step in the sequence
+    power_index = powers.POWERS_OF_2.index(sequence[0])
+    output = "01" * (power_index//2 + 1)
+    if power_index%2 == 0:
+        output = "0" + output[2:]
+    else:
+        output = "1" + output[1:]
+    offset = power_index%2
+    depth = 1
 
-    for step in sequence:
-        pass
+
+    for step in sequence[1:]:
+        depth += 1
+        power_index = powers.POWERS_OF_2.index(step)
+
+        cycle_period = 2*powers.POWERS_OF_3[depth - 1]
+        previous_cycle_period = 2*powers.POWERS_OF_3[depth - 2]
+
+        # This is the amount that the number is shifted by the left by to encode the offset of the previous section
+        offset_size = (offset + (1 if depth <= 2 else 0) - 1)%previous_cycle_period + 1
+        offset_factor = powers.POWERS_OF_2[offset_size - 1]
+        # This is the power of 3 associated with the previous section
+        depth_power = powers.POWERS_OF_3[depth - 1]
+
+        power_of_4 = power_index//2 + 1
+        while True:
+            # This is the initial offset test
+            offset_test = powers.POWERS_OF_2[power_of_4*2]
+            numerator = (offset_test - 1)//3 * offset_factor - 1 # This number has the form 0101010101001111111 in binary
+            if numerator % depth_power == 0:
+                value = numerator // depth_power
+                offset = (cycle_period - power_of_4*2 + 1 + power_index)%cycle_period
+                binary_string = format_to_binary((value, offset_test*offset_factor))
+                output = binary_string[-offset_size-power_index: -offset_size] + output
+                if output.startswith("0"):
+                    output = "1" + output[1:]
+                else:
+                    output = "0" + output[1:]
+                break
+
+            power_of_4 += 1
 
     return output
+
+
+
+def prompt_constructive_trailing_bit_generator():
+    while True:
+        sequence_prompt = input("Sequence (leave blank to exit): ")
+        if not sequence_prompt:
+            return
+        
+        try:
+            sequence = generic.extract_sequence_from_prompt(sequence_prompt)
+        except:
+            continue
+        
+        old = format_to_binary(generate_trailing_bits(sequence))
+        new = constructive_trailing_bit_generator(sequence)
+        print(f"Old: {old}")
+        print(f"New: {new}")
+        if old == new:
+            print("Match!")
+        else:
+            print("ERROR")
+
+
+
+def prompt_exhaustive_constructive_test():
+    while True:
+        depth_prompt = input("Depth (leave blank to exit): ")
+        if not depth_prompt:
+            return
+        if not depth_prompt.isnumeric():
+            print(f"ERROR: {depth_prompt} is not numeric!")
+            continue
+        depth = int(depth_prompt)
+
+        power_limit_prompt = input("Power limit (leave blank to exit): ")
+        if not power_limit_prompt:
+            return
+        if not power_limit_prompt.isnumeric():
+            print(f"ERROR: {power_limit_prompt} is not numeric!")
+            continue
+        power_limit = int(power_limit_prompt)
+
+        print("")
+        exhaustive_constructive_test_layer([], depth, power_limit, 1)
+
+
+def exhaustive_constructive_test_layer(sequence: list[int], depth: int, power_limit: int, length: int):
+    sequence.append(1)
+    for i in range(1, power_limit+1):
+        sequence[-1] = powers.POWERS_OF_2[i]
+        length += 1
+        old = format_to_binary(generate_trailing_bits(sequence))
+        new = constructive_trailing_bit_generator(sequence)
+        if old != new:
+            print(f"{sequence}\n{old}\n{new}\n")
+
+        if len(sequence) < depth:
+            exhaustive_constructive_test_layer(sequence.copy(), depth, power_limit, length)
 
 
 
@@ -443,6 +539,8 @@ def prompt():
         print("8) Exhaustive offset finder")
         print("9) Export offset array")
         print("10) Constructive test")
+        print("11) Constructive trailing bit generator")
+        print("12) Exhaustive constructive test")
         select = input("Select (leave blank to exit): ")
 
         if not select:
@@ -468,6 +566,10 @@ def prompt():
             export_offset_array(3)
         if select == "10":
             trigger_constructive_test()
+        if select == "11":
+            prompt_constructive_trailing_bit_generator()
+        if select == "12":
+            prompt_exhaustive_constructive_test()
 
 
 
