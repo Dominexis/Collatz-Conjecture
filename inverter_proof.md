@@ -28,9 +28,11 @@ $`3n+1 \equiv 2^k \left(\mathrm{mod}\ 2^{k+1}\right) \\ 3n \equiv 2^k - 1 \left(
 
 When we divide both sides by 3, we will have to perform modular division on the right hand side. To reliably perform modular division, we will express the numbers in binary and use an algorithm which will leverage this fact.
 
-<details>
-<summary> Proof 1.2, 2-adic Division </summary>
+<details open>
+<summary> 2-adic division </summary>
 
+> Proof 1.2, 2-adic Division:
+>
 > Given a product $`P`$ and a factor $`F`$, we wish to compute output $`O`$ such that $`OF = P`$.
 >
 > $`O`$, $`F`$, and $`P`$ are all natural numbers.
@@ -79,9 +81,11 @@ When we divide both sides by 3, we will have to perform modular division on the 
 
 We will use a special case for division by 3.
 
-<details>
-<summary> Proof 1.3, 2-adic Division by 3 </summary>
+<details open>
+<summary> 2-adic division by 3 </summary>
 
+> Proof 1.3, 2-adic Division by 3:
+>
 > Take the expressions from Proof 1.2 and set $`F = 3`$.
 >
 > $`O_b \equiv P_b - \sum_{m=0}^{b-1} O_m F_{b-m} + C_{b-1} 2^{-1} \left(\mathrm{mod}\ 2\right) \\ C_b = P_b - \sum_{m=0}^{b} O_m F_{b-m} + C_{b-1} 2^{-1}`$
