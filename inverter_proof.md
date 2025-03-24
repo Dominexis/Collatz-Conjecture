@@ -33,9 +33,7 @@ When we divide both sides by 3, we will have to perform modular division on the 
 
 > Proof 1.2, 2-adic Division:
 >
-> Given a product $`P`$ and a factor $`F`$, we wish to compute output $`O`$ such that $`OF = P`$.
->
-> $`O`$, $`F`$, and $`P`$ are all natural numbers.
+> Given a product $`P`$ and a factor $`F`$, we wish to compute output $`O`$ such that $`OF = P`$, and that they are all natural numbers.
 >
 > $`OF = P \\ O, F, P \in \N`$
 >
