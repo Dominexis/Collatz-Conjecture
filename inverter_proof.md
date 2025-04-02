@@ -26,7 +26,7 @@ To define the inverter, we will apply the inverse Collatz function to a sequence
 
 > Definition 1.3, the Collatz inverter function:
 >
-> Let $`s^n`$ be a sequence of length $`n`$, where $`s_n`$ is the $`n\text{th}`$ term in the sequence, indexed at 0.
+> Let $`s^n`$ be a sequence of length $`n`$, where $`s_n`$ is the $`n\text{th}`$ term in the sequence, indexed at $`0`$.
 >
 > In the trivial case where the sequence is empty and there are no steps to invert, we will return an odd number $`2k+1`$, where $`k \in \mathbb{Z}`$.
 >
@@ -52,9 +52,9 @@ We will expand out the definition to produce a reduced expression.
 >
 > Every term in the sequence is a natural number, so the product on the right is equivalent to $`2^{\infty}`$:
 >
-> $`\begin{align} \mathrm{Inverter}\left(s^{\infty}\right) & = \sum_{n=0}^{\infty} \frac{-1}{3^{n+1}} \prod_{p=0}^{n-1} 2^{s_p} + \left(2k+1\right) \frac{2^{\infty}}{3^{\infty}} \notag \\ & = \sum_{n=0}^{\infty} \frac{-1}{3^{n+1}} \prod_{p=0}^{n-1} 2^{s_p} + \left(2k+1\right) \left(\frac{2}{3}\right)^{\infty} \notag \end{align}`$
+> $`\begin{align} \mathrm{Inverter}\left(s^{\infty}\right) & = \sum_{n=0}^{\infty} \frac{-1}{3^{n+1}} \prod_{p=0}^{n-1} 2^{s_p} + \left(2k+1\right) \frac{2^{\infty}}{3^{\infty}} \notag \end{align}`$
 >
-> Because $`\lim_{x \to \infty} \left(\frac{2}{3}\right)^x = 0`$, we can cancel the right term:
+> We are working with 2-adic numbers. Given that $`2^{\infty} \equiv 0 \left(\mathrm{mod} \ 2^k\right)`$, we can substitute $`2^{\infty}`$ for $`0`$, which cancels the right term.
 >
 > $`\begin{align} \mathrm{Inverter}\left(s^{\infty}\right) & = \sum_{n=0}^{\infty} \frac{-1}{3^{n+1}} \prod_{p=0}^{n-1} 2^{s_p} \notag \end{align}`$
 
