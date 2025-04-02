@@ -28,7 +28,7 @@ To define the inverter, we will apply the inverse Collatz function to a sequence
 >
 > Let $`s^n`$ be a sequence of length $`n`$, where $`s_n`$ is the $`n\text{th}`$ term in the sequence, indexed at 0.
 >
-> In the trivial case where the sequence is empty and there are no steps to invert, we will return an odd number $`2k+1`$, where $`k \in \Z`$.
+> In the trivial case where the sequence is empty and there are no steps to invert, we will return an odd number $`2k+1`$, where $`k \in \mathbb{Z}`$.
 >
 > Otherwise, when inverting the sequence, we undo the steps from last to first. We will do this by recursively nesting the function, with the last step being handled by the deepest nested layer:
 >
@@ -69,7 +69,7 @@ To use the inverter effectively, we will represent the numbers in binary and use
 >
 > Given a product $`P`$ and a factor $`F`$, we wish to compute output $`O`$ such that $`OF = P`$. All of them are natural numbers.
 >
-> $`\begin{align} OF & = P \notag \\ O, F, P & \in \N \notag \end{align}`$
+> $`\begin{align} OF & = P \notag \\ O, F, P & \in \mathbb{N} \notag \end{align}`$
 >
 > We will convert these values into a sum of powers of 2, representing the bits in the binary representation of these values.
 >
