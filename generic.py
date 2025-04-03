@@ -1,4 +1,5 @@
 from pathlib import Path
+import powers
 
 
 
@@ -102,6 +103,11 @@ def convert_sequence_to_powers(sequence: list[int]) -> list[int]:
         powers.pop()
 
     return powers
+
+
+
+def convert_powers_to_exponents(sequence: list[int]) -> list[int]:
+    return [powers.POWERS_OF_2.index(power) for power in sequence]
 
 
 

@@ -57,7 +57,7 @@ def prompt():
             continue
 
         sequence = collatz_sequence(int(value), int(denominator))
-        print(f"Sequence: {sequence}\nSteps: {generic.convert_sequence_to_powers(sequence)}\nSequence length: {len(sequence)}\n")
+        print(f"Sequence: {sequence}\nSteps: {generic.convert_sequence_to_powers(sequence)}\nExponents: {generic.convert_powers_to_exponents(generic.convert_sequence_to_powers(sequence))}\nSequence length: {len(sequence)}\n")
 
 
 
