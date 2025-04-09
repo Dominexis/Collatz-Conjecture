@@ -65,7 +65,7 @@ To use the inverter effectively, we will represent the numbers in binary and use
 <details open>
 <summary> 2-adic division </summary>
 
-> Proof 2.1, 2-adic Division:
+> Proof 2.1, 2-adic division:
 >
 > Given a product $`P`$ and a factor $`F`$, we wish to compute output $`O`$ such that $`OF = P`$. All of them are natural numbers.
 >
@@ -116,7 +116,7 @@ We will use a special case for division by 3.
 <details open>
 <summary> 2-adic division by 3 </summary>
 
-> Proof 2.2, 2-adic Division by 3:
+> Proof 2.2, 2-adic division by 3:
 >
 > Take the expressions from Proof 2.1 and set $`F = 3`$.
 >
@@ -127,3 +127,51 @@ We will use a special case for division by 3.
 > $`\begin{align} O_b & \equiv P_b - O_{b-1} + C_{b-1} 2^{-1} & \left(\mathrm{mod}\ 2\right) \notag \\ C_b & = P_b - O_b - O_{b-1} + C_{b-1} 2^{-1} \notag \end{align}`$
 
 </details>
+
+## 3. The Collatz Loop Function
+
+To further aid our study, we will define a function which will return the number such that, after going through a given sequence of steps in the Collatz function, will return to itself.
+
+> Proof 3.1, the Collatz loop function
+>
+> We will define $`\mathrm{Loop}\left(s^L\right)`$ as the number which will return to itself after taking the steps in sequence $`s`$ of length $`L`$ in the Collatz function.
+>
+> $`\begin{align} \text{Let } \mathrm{Loop}\left(s^L\right) & = x \text{ where} \notag \\ x & = \frac{\frac{\frac{\frac{3x + 1}{2^{s_0}}3 + 1}{2^{s_1}} \ldots 3 + 1}{2^{s_{L-2}}}3 + 1}{2^{s_{L-1}}} \notag \\ x & = \frac{\frac{\frac{\frac{3^Lx + 3^{L-1}}{2^{s_0}} + 3^{L-2}}{2^{s_1}} \ldots + 3}{2^{s_{L-2}}} + 1}{2^{s_{L-1}}} \notag \\ x & = \frac{1}{2^{s_{L-1}}} + \frac{3}{2^{s_{L-2} + s_{L-1}}} \ldots \frac{3^{L-2}}{2^{s_1 \ldots s_{L-1}}} + \frac{3^{L-1}}{2^{s_0 + s_1 \ldots s_{L-1}}} + \frac{3^Lx}{2^{s_0 + s_1 \ldots s_{L-1}}} \notag \\ \frac{2^{s_0 + s_1 \ldots s_{L-1}} - 3^L}{2^{s_0 + s_1 \ldots s_{L-1}}}x & = \frac{1}{2^{s_{L-1}}} + \frac{3}{2^{s_{L-2} + s_{L-1}}} \ldots \frac{3^{L-2}}{2^{s_1 \ldots s_{L-1}}} + \frac{3^{L-1}}{2^{s_0 + s_1 \ldots s_{L-1}}} \notag \\ \left(2^{s_0 + s_1 \ldots s_{L-1}} - 3^L\right)x & = 2^{s_0 + s_1 \ldots s_{L-2}} + 3 \times 2^{s_0 + s_1 \ldots s_{L-3}} \ldots 3^{L-2} \times 2^{s_0} + 3^{L-1} \notag \\ x & = \frac{2^{s_0 + s_1 \ldots s_{L-2}} + 3 \times 2^{s_0 + s_1 \ldots s_{L-3}} \ldots 3^{L-2} \times 2^{s_0} + 3^{L-1}}{2^{s_0 + s_1 \ldots s_{L-1}} - 3^L} \notag \\ \mathrm{Loop}\left(s^L\right) & = \frac{\sum_{t=0}^{L-1} 3^{L-1-t} \prod_{p=0}^{t-1} 2^{s_p}}{\prod_{p=0}^{L-1} 2^{s_p} - 3^L} \notag \end{align}`$
+
+## 4. Analysis of the Inverter
+
+The Collatz function (1.1) is deterministic. Therefore, a given 2-adic has exactly one infinite sequence of steps that it will follow when carried out by the Collatz function.
+
+Likewise, the Collatz inverter function (1.4) is deterministic. Therefore, a given infinite sequence of steps produces exactly one 2-adic when inverted. Therefore, no two 2-adics share the same infinite sequence of steps.
+
+Thus, there is a bijection between the set of all possible 2-adic numbers and the set of all possible infinite sequences of natural numbers.
+
+> Theorem 4.1, uniqueness of numbers and sequences
+>
+> Every 2-adic number has exactly one infinite sequence of steps via the Collatz function, and every infinite sequence of steps has exactly one 2-adic number via the Collatz inverter function.
+
+Suppose that you had an infinite sequence of steps $`s^{\infty}`$ that repeated itself every $`c`$ steps, such that $`s_n = s_{n+ck}`$ where $`c, k \in \mathbb{N}`$
+
+Define a second sequence which is the same as the first, except that it is missing the first cycle: $`t_n = s_{n+c}`$
+
+These sequences are actually equivalent: $`s_n = t_n = s_{n+c}`$
+
+Thus, an infinite repeating sequence of steps produces the same number as that same infinite repeating sequence of steps minus the first cycle. Therefore, after said number goes through the steps of the cycle via the Collatz function, it will return to itself. Therefore, infinite repeating sequences of steps refer to loops within the Collatz function, with the period of the sequence being the period of the loop.
+
+> Theorem 4.2, looped sequences
+>
+> Every infinite repeating sequence of steps represents a loop within the Collatz function.
+
+Suppose that you had an infinite sequence of steps $`s^{\infty}`$ which resolved to a known value $`r`$, such that $`\mathrm{Inverter}\left(s^{\infty}\right) = r`$
+
+Inserting another step $`n`$ at the start of the sequence is equivalent to undoing that same step from $`r`$.
+
+$`\mathrm{Inverter}\left(\left[n, s_0, s_1 \ldots\right]\right) = \mathrm{Collatz}^{-1}\left(r, n\right)`$
+
+This may be applied recursively.
+
+> Theorem 4.3, sequence preambles
+>
+> If a number $`r`$ follows the sequence of steps $`s^{\infty}`$ when iterating the Collatz function, then the number which follows a preamble of $`p`$ steps followed up by the sequence $`s^{\infty}`$ will land on $`r`$ after the preamble concludes in $`p`$ steps.
+
+Therefore, if an infinite sequence of steps repeats itself only after some preamble of length $`p`$, such that $`s_n = s_{n+ck}`$ where $`n \ge p`$, then the number which follows these steps will fall into the associated loop after $`p`$ steps.
