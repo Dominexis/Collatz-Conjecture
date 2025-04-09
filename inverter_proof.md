@@ -137,8 +137,11 @@ To further aid our study, we will define a function which will return the number
 > We will define $`\mathrm{Loop}\left(s^L\right)`$ as the number which will return to itself after taking the steps in sequence $`s`$ of length $`L`$ in the Collatz function.
 >
 > $`\begin{align} \text{Let } \mathrm{Loop}\left(s^L\right) & = x \text{ where} \notag \end{align}`$
+>
 > $`\begin{align} x & = \frac{\frac{\frac{\frac{3x + 1}{2^{s_0}}3 + 1}{2^{s_1}} \ldots 3 + 1}{2^{s_{L-2}}}3 + 1}{2^{s_{L-1}}} \notag \\ x & = \frac{\frac{\frac{\frac{3^Lx + 3^{L-1}}{2^{s_0}} + 3^{L-2}}{2^{s_1}} \ldots + 3}{2^{s_{L-2}}} + 1}{2^{s_{L-1}}} \notag \end{align}`$
+>
 > $`\begin{align} x & = \frac{1}{2^{s_{L-1}}} + \frac{3}{2^{s_{L-2} + s_{L-1}}} \ldots \frac{3^{L-2}}{2^{s_1 \ldots s_{L-1}}} + \frac{3^{L-1}}{2^{s_0 + s_1 \ldots s_{L-1}}} + \frac{3^Lx}{2^{s_0 + s_1 \ldots s_{L-1}}} \notag \\ \frac{2^{s_0 + s_1 \ldots s_{L-1}} - 3^L}{2^{s_0 + s_1 \ldots s_{L-1}}}x & = \frac{1}{2^{s_{L-1}}} + \frac{3}{2^{s_{L-2} + s_{L-1}}} \ldots \frac{3^{L-2}}{2^{s_1 \ldots s_{L-1}}} + \frac{3^{L-1}}{2^{s_0 + s_1 \ldots s_{L-1}}} \notag \\ \left(2^{s_0 + s_1 \ldots s_{L-1}} - 3^L\right)x & = 2^{s_0 + s_1 \ldots s_{L-2}} + 3 \times 2^{s_0 + s_1 \ldots s_{L-3}} \ldots 3^{L-2} \times 2^{s_0} + 3^{L-1} \notag \\ x & = \frac{2^{s_0 + s_1 \ldots s_{L-2}} + 3 \times 2^{s_0 + s_1 \ldots s_{L-3}} \ldots 3^{L-2} \times 2^{s_0} + 3^{L-1}}{2^{s_0 + s_1 \ldots s_{L-1}} - 3^L} \notag \end{align}`$
+>
 > $`\begin{align} \mathrm{Loop}\left(s^L\right) & = \frac{\sum_{t=0}^{L-1} 3^{L-1-t} \prod_{p=0}^{t-1} 2^{s_p}}{\prod_{p=0}^{L-1} 2^{s_p} - 3^L} \notag \end{align}`$
 
 ## 4. Basic Theorems
