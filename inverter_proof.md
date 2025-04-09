@@ -132,13 +132,15 @@ We will use a special case for division by 3.
 
 To further aid our study, we will define a function which will return the number such that, after going through a given sequence of steps in the Collatz function, will return to itself.
 
-> Proof 3.1, the Collatz loop function
+> Proof 3.1, the Collatz loop function:
 >
 > We will define $`\mathrm{Loop}\left(s^L\right)`$ as the number which will return to itself after taking the steps in sequence $`s`$ of length $`L`$ in the Collatz function.
 >
 > $`\begin{align} \text{Let } \mathrm{Loop}\left(s^L\right) & = x \text{ where} \notag \\ x & = \frac{\frac{\frac{\frac{3x + 1}{2^{s_0}}3 + 1}{2^{s_1}} \ldots 3 + 1}{2^{s_{L-2}}}3 + 1}{2^{s_{L-1}}} \notag \\ x & = \frac{\frac{\frac{\frac{3^Lx + 3^{L-1}}{2^{s_0}} + 3^{L-2}}{2^{s_1}} \ldots + 3}{2^{s_{L-2}}} + 1}{2^{s_{L-1}}} \notag \\ x & = \frac{1}{2^{s_{L-1}}} + \frac{3}{2^{s_{L-2} + s_{L-1}}} \ldots \frac{3^{L-2}}{2^{s_1 \ldots s_{L-1}}} + \frac{3^{L-1}}{2^{s_0 + s_1 \ldots s_{L-1}}} + \frac{3^Lx}{2^{s_0 + s_1 \ldots s_{L-1}}} \notag \\ \frac{2^{s_0 + s_1 \ldots s_{L-1}} - 3^L}{2^{s_0 + s_1 \ldots s_{L-1}}}x & = \frac{1}{2^{s_{L-1}}} + \frac{3}{2^{s_{L-2} + s_{L-1}}} \ldots \frac{3^{L-2}}{2^{s_1 \ldots s_{L-1}}} + \frac{3^{L-1}}{2^{s_0 + s_1 \ldots s_{L-1}}} \notag \\ \left(2^{s_0 + s_1 \ldots s_{L-1}} - 3^L\right)x & = 2^{s_0 + s_1 \ldots s_{L-2}} + 3 \times 2^{s_0 + s_1 \ldots s_{L-3}} \ldots 3^{L-2} \times 2^{s_0} + 3^{L-1} \notag \\ x & = \frac{2^{s_0 + s_1 \ldots s_{L-2}} + 3 \times 2^{s_0 + s_1 \ldots s_{L-3}} \ldots 3^{L-2} \times 2^{s_0} + 3^{L-1}}{2^{s_0 + s_1 \ldots s_{L-1}} - 3^L} \notag \\ \mathrm{Loop}\left(s^L\right) & = \frac{\sum_{t=0}^{L-1} 3^{L-1-t} \prod_{p=0}^{t-1} 2^{s_p}}{\prod_{p=0}^{L-1} 2^{s_p} - 3^L} \notag \end{align}`$
 
-## 4. Analysis of the Inverter
+## 4. Basic Theorems
+
+### 4.1. Uniqueness
 
 The Collatz function (1.1) is deterministic. Therefore, a given 2-adic has exactly one infinite sequence of steps that it will follow when carried out by the Collatz function.
 
@@ -146,9 +148,11 @@ Likewise, the Collatz inverter function (1.4) is deterministic. Therefore, a giv
 
 Thus, there is a bijection between the set of all possible 2-adic numbers and the set of all possible infinite sequences of natural numbers.
 
-> Theorem 4.1, uniqueness of numbers and sequences
+> Theorem 4.1, uniqueness of numbers and sequences:
 >
 > Every 2-adic number has exactly one infinite sequence of steps via the Collatz function, and every infinite sequence of steps has exactly one 2-adic number via the Collatz inverter function.
+
+### 4.2. Looped Sequences
 
 Suppose that you had an infinite sequence of steps $`s^{\infty}`$ that repeated itself every $`c`$ steps, such that $`s_n = s_{n+ck}`$ where $`c, k \in \mathbb{N}`$
 
@@ -158,9 +162,11 @@ These sequences are actually equivalent: $`s_n = t_n = s_{n+c}`$
 
 Thus, an infinite repeating sequence of steps produces the same number as that same infinite repeating sequence of steps minus the first cycle. Therefore, after said number goes through the steps of the cycle via the Collatz function, it will return to itself. Therefore, infinite repeating sequences of steps refer to loops within the Collatz function, with the period of the sequence being the period of the loop.
 
-> Theorem 4.2, looped sequences
+> Theorem 4.2, looped sequences:
 >
 > Every infinite repeating sequence of steps represents a loop within the Collatz function.
+
+### 4.3. Preambles
 
 Suppose that you had an infinite sequence of steps $`s^{\infty}`$ which resolved to a known value $`r`$, such that $`\mathrm{Inverter}\left(s^{\infty}\right) = r`$
 
@@ -170,8 +176,54 @@ $`\mathrm{Inverter}\left(\left[n, s_0, s_1 \ldots\right]\right) = \mathrm{Collat
 
 This may be applied recursively.
 
-> Theorem 4.3, sequence preambles
+> Theorem 4.3, sequence preambles:
 >
 > If a number $`r`$ follows the sequence of steps $`s^{\infty}`$ when iterating the Collatz function, then the number which follows a preamble of $`p`$ steps followed up by the sequence $`s^{\infty}`$ will land on $`r`$ after the preamble concludes in $`p`$ steps.
 
 Therefore, if an infinite sequence of steps repeats itself only after some preamble of length $`p`$, such that $`s_n = s_{n+ck}`$ where $`n \ge p`$, then the number which follows these steps will fall into the associated loop after $`p`$ steps.
+
+### 4.4. Rationality
+
+Given some finite sequence of steps $`s^L`$, the Collatz loop function (3.1) will return the number such that, after taking those steps in the Collatz function, will return to itself.
+
+The function returns a fraction, where the numerator and denominator are both integers. Thus, it will always return a rational value. Thus, an irrational value will never return to itself when iterated on the Collatz function.
+
+In 2-adics, a number is rational if the bits repeat infinitely after some preamble, and a number is irrational if it never repeats.
+
+Thus, if an infinite sequence of steps repeats itself, the inverted number will always be rational and have repeating bits. Likewise, if the number does not have repeating bits, then the resulting sequence of steps will not repeat.
+
+> Theorem 4.4, rational loops:
+>
+> Every member of a loop in the Collatz function is rational. Irrational values will never return to themselves when iterated through the Collatz function.
+
+### 4.5. Rational Collatz Function
+
+A 2-adic number may be used in the Collatz function trivially. 2-adic numbers may represent integers, rational numbers, or irrational numbers. Each of these may be used in the Collatz function if they are expressed in 2-adic form.
+
+When dividing one 2-adic by another using 2-adic division (2.1), it will return a rational 2-adic with infinitely repeating bits after some preamble. Multiplying the number by a power of 2 shifts the bits to the left and does not alter the cycle. Neither does adding integers alter the cycle.
+
+If a 2-adic ends with a 0 bit, it may be divided by 2 without altering the cycle. Because $`\frac{1}{2}`$ cannot be represented as a 2-adic, the denominator of a rational 2-adic must always be odd. Thus, if a rational 2-adic may be divided by 2, dividing by 2 does not alter the denominator of the number.
+
+Thus, the Collatz function may be generalized to rationals by considering the parity of the numerator when the ratio is in its simplest form.
+
+> Definition 4.5, rational Collatz function:
+>
+> $`\begin{align} \mathrm{Collatz}\left(n\right) = & \begin{cases} n/2 & \text{if}\ a \equiv 0 \left(\mathrm{mod}\ 2\right) \\ 3n+1 & \text{if}\ a \equiv 1 \left(\mathrm{mod}\ 2\right) \end{cases} \notag \\ & \text{ where } n = \frac{a}{b}; a, b \in \mathbb{Z}; \mathrm{gcd}\left(a, b\right) = 1 \notag \end{align}`$
+
+### 4.6. Denominator Preservation
+
+When iterating a rational number through the generalized Collatz function, the even step will never alter the denominator of the ratio when expressed in its simplest form because the numerator is even. The odd step will alter the denominator if and only if the denominator is a multiple of 3.
+
+> Theorem 4.6, denominator preservation
+>
+> When a rational number is iterated through the rational Collatz function, the denominator of the ratio when expressed in its simplest form will not change, unless the denominator is a multiple of 3.
+>
+> If the denominator is a multiple of 3, the factors of 3 will be canceled out by each iteration.
+
+### 4.7. Rational Divergence
+
+Suppose that you had a rational number which goes through a sequence of steps that does not repeat when iterated through the Collatz function. Such a sequence of numbers may not include the same number twice, as this would produce a loop. Because the denominator is not allowed to change (4.6), by the pigeonhole principle, the sequence of numbers must diverge.
+
+> Theorem 4.7, rational divergence
+>
+> If a rational number will follow an infinite sequence of steps that does not repeat when iterated through the Collatz function, it must diverge.
