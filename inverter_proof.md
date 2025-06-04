@@ -206,7 +206,7 @@ Thus, if an infinite sequence of steps repeats itself, the inverted number will 
 
 A 2-adic number may be used in the Collatz function trivially. 2-adic numbers may represent integers, rational numbers, or irrational numbers. Each of these may be used in the Collatz function if they are expressed in 2-adic form.
 
-When dividing one 2-adic by another using 2-adic division (2.1), it will return a rational 2-adic with infinitely repeating bits after some preamble. Multiplying the number by a power of 2 shifts the bits to the left and does not alter the cycle. Neither does adding integers alter the cycle.
+When dividing one rational 2-adic by another using 2-adic division (2.1), it will return a rational 2-adic with infinitely repeating bits after some preamble. Multiplying the number by a power of 2 shifts the bits to the left and does not alter the cycle. Neither does adding integers alter the cycle.
 
 If a 2-adic ends with a 0 bit, it may be divided by 2 without altering the cycle. Because $`\frac{1}{2}`$ cannot be represented as a 2-adic, the denominator of a rational 2-adic must always be odd. Thus, if a rational 2-adic may be divided by 2, dividing by 2 does not alter the denominator of the number.
 
