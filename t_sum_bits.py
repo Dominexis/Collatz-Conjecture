@@ -44,11 +44,14 @@ def compare_bits():
     contents = ""
     modulo = powers.POWERS_OF_2[1000]
     t_sum = 1
-    # preamble = [1, 2, 1, 1, 1, 1, 2, 2, 1, 2, 1, 1, 2, 1, 1, 1, 2, 3, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 3, 1, 1, 1, 4, 2, 2, 4, 3, 1, 1, 5, 4]
-    preamble = [1, 1, 1, 4, 2, 1, 4, 1, 3, 2, 2, 3, 5, 3]
-    loop = [1, 1, 2, 1, 1, 4, 1]
     power_of_2 = 0
-    right_side = (modulo - -45169)*3 % modulo
+
+    preamble = [1, 2, 1, 1, 1, 1, 2, 2, 1, 2, 1, 1, 2, 1, 1, 1, 2, 3, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 3, 1, 1, 1, 4, 2, 2, 4, 3, 1, 1, 5, 4]
+    right_side = (modulo - 27)*3 % modulo
+    loop = [2]
+    # preamble = [1, 1, 1, 4, 2, 1, 4, 1, 3, 2, 2, 3, 5, 3]
+    # right_side = (modulo - -45169)*3 % modulo
+    # loop = [1, 1, 2, 1, 1, 4, 1]
     for i in range(1000):
         t_sum_line = convert_to_bits(t_sum)
         right_side_line = convert_to_bits(right_side)

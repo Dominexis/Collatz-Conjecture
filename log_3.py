@@ -35,4 +35,4 @@ def compute_log_3(bits: str):
 
 if __name__ == "__main__":
     # compute_log_3("110100010001") # 3^7 = 2187
-    compute_log_3("110111111111111111111111111")
+    compute_log_3("110011111111111111111111111")
