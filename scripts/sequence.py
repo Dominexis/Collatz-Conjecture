@@ -40,14 +40,20 @@ def prompt():
         value = input("Starting value (leave blank to exit): ")
         if not value:
             return
+        random_number = None
         if value.startswith("l"):
-            new_value = ""
+            random_number = 0
+            place = 1
             for i in range(int(value[1:])):
-                new_value += str(random.randint(0, 9))
-            value = new_value
-        if not generic.is_int(value):
+                random_number += random.randint(0, 9)*place
+                place *= 10
+        elif not generic.is_int(value):
             print(f"ERROR: {value} is not numeric!")
             continue
+        if random_number is not None:
+            value = random_number
+        else:
+            value = int(value)
 
         denominator = input("Denominator (leave blank to exit): ")
         if not denominator:
@@ -56,8 +62,8 @@ def prompt():
             print(f"ERROR: {denominator} is not numeric!")
             continue
 
-        sequence = collatz_sequence(int(value), int(denominator))
-        print(f"Sequence: {sequence}\nSteps: {generic.convert_sequence_to_powers(sequence)}\nExponents: {generic.convert_powers_to_exponents(generic.convert_sequence_to_powers(sequence))}\nSequence length: {len(sequence)}\n")
+        sequence = collatz_sequence(value, int(denominator))
+        print(f"Sequence: {sequence}\nSteps: {generic.convert_sequence_to_powers(sequence)}\nExponents: {generic.convert_powers_to_exponents(generic.convert_sequence_to_powers(sequence))}\nSequence length: {len(sequence)}\nStarting value: {value}\nEnding value: {sequence[-1]}\n")
 
 
 
